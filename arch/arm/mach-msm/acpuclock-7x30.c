@@ -96,6 +96,12 @@ static struct pll pll2_tbl[] = {
 	{  53, 1, 3, 0 }, /* 1024 MHz */
 	{ 125, 0, 1, 1 }, /* 1200 MHz */
 	{  73, 0, 1, 0 }, /* 1401 MHz */
+	{  78, 1, 3, 0 }, /* 1516 MHz */
+        {  83, 1, 3, 0 }, /* 1612 MHz */
+        {  88, 1, 3, 0 }, /* 1708 MHz */
+	{  93, 1, 3, 0 }, /* 1804 Mhz */
+	{  98, 1, 3, 0 }, /* 1900 Mhz */
+	{ 101, 1, 3, 0 }, /* 2016 Mhz */ 
 };
 
 /* Use negative numbers for sources that can't be enabled/disabled */
@@ -108,23 +114,29 @@ static struct pll pll2_tbl[] = {
  * know all the h/w requirements.
  */
 static struct clkctl_acpu_speed acpu_freq_tbl[] = {
-	{ 0, 24576,  SRC_LPXO, 0, 0,  30720000,  900, VDD_RAW(900) },
-	{ 0, 61440,  PLL_3,    5, 11, 61440000,  900, VDD_RAW(900) },
-	{ 1, 122880, PLL_3,    5, 5,  61440000,  900, VDD_RAW(900) },
-	{ 0, 184320, PLL_3,    5, 4,  61440000,  900, VDD_RAW(900) },
-	{ 0, MAX_AXI_KHZ, SRC_AXI, 1, 0, 61440000, 900, VDD_RAW(900) },
-	{ 1, 245760, PLL_3,    5, 2,  61440000,  900, VDD_RAW(900) },
-	{ 1, 368640, PLL_3,    5, 1,  122800000, 900, VDD_RAW(900) },
-	/* AXI has MSMC1 implications. See above. */
-	{ 1, 768000, PLL_1,    2, 0,  153600000, 1050, VDD_RAW(1050) },
-	/*
-	 * AXI has MSMC1 implications. See above.
-	 */
-	{ 1, 806400,  PLL_2, 3, 0, UINT_MAX, 1100, VDD_RAW(1100), &pll2_tbl[0]},
-	{ 1, 1024000, PLL_2, 3, 0, UINT_MAX, 1200, VDD_RAW(1200), &pll2_tbl[1]},
-	{ 1, 1200000, PLL_2, 3, 0, UINT_MAX, 1200, VDD_RAW(1200), &pll2_tbl[2]},
-	{ 1, 1401600, PLL_2, 3, 0, UINT_MAX, 1250, VDD_RAW(1250), &pll2_tbl[3]},
-	{ 0 }
+            { 0, 24576, SRC_LPXO, 0, 0,  30720000,  900, VDD_RAW(900) },
+            { 0, 61440,   PLL_3, 5, 11, 61440000,  900, VDD_RAW(900) },
+            { 1, 122880,  PLL_3, 5, 5,  61440000,  900, VDD_RAW(900) },
+            { 0, 184320,  PLL_3, 5, 4,  61440000,  900, VDD_RAW(900) },
+            { 1, 245760,  PLL_3, 5, 2,  61440000,  900, VDD_RAW(900) },
+            { 1, 368640,  PLL_3, 5, 1,  122800000, 900, VDD_RAW(900) },
+            { 1, 460800,  PLL_1, 2, 0,  153600000, 950, VDD_RAW(950) },
+            { 1, 576000,  PLL_1, 2, 0,  153600000, 1000, VDD_RAW(1000) },
+            { 1, 652800,  PLL_1, 2, 0,  153600000, 1050, VDD_RAW(1050) },
+            { 1, 768000,  PLL_1, 2, 0,  153600000, 1050, VDD_RAW(1050) },
+            { 1, 921600,  PLL_2, 3, 0, UINT_MAX, 1150, VDD_RAW(1150), &pll2_tbl[0]},
+            { 1, 1024000, PLL_2, 3, 0, UINT_MAX, 1200, VDD_RAW(1200), &pll2_tbl[1]},
+            { 1, 1113000, PLL_2, 3, 0, UINT_MAX, 1200, VDD_RAW(1200), &pll2_tbl[2]},
+            { 1, 1200000, PLL_2, 3, 0, UINT_MAX, 1200, VDD_RAW(1200), &pll2_tbl[3]},
+            { 1, 1305600, PLL_2, 3, 0, UINT_MAX, 1250, VDD_RAW(1250), &pll2_tbl[4]},
+            { 1, 1401600, PLL_2, 3, 0, UINT_MAX, 1250, VDD_RAW(1250), &pll2_tbl[5]},
+            { 1, 1516800, PLL_2, 3, 0, UINT_MAX, 1300, VDD_RAW(1300), &pll2_tbl[6]},
+            { 1, 1612800, PLL_2, 3, 0, UINT_MAX, 1300, VDD_RAW(1300), &pll2_tbl[7]},
+            { 1, 1708800, PLL_2, 3, 0, UINT_MAX, 1350, VDD_RAW(1350), &pll2_tbl[8]},
+            { 1, 1804800, PLL_2, 3, 0, UINT_MAX, 1375, VDD_RAW(1375), &pll2_tbl[9]},
+            { 1, 1900800, PLL_2, 3, 0, UINT_MAX, 1400, VDD_RAW(1400), &pll2_tbl[10]},
+            { 1, 2016000, PLL_2, 3, 0, UINT_MAX, 1425, VDD_RAW(1425), &pll2_tbl[11]},
+            { 0 }
 };
 
 #define POWER_COLLAPSE_KHZ MAX_AXI_KHZ
@@ -499,3 +511,48 @@ void __init msm_acpu_clock_init(struct msm_acpu_clock_platform_data *clkdata)
 	lpj_init();
 	setup_cpufreq_table();
 }
+
+#ifdef CONFIG_CPU_FREQ_VDD_LEVELS
+
+ssize_t acpuclk_get_vdd_levels_str(char *buf)
+{
+	int i, len = 0;
+	if (buf)
+	{
+		mutex_lock(&drv_state.lock);
+		for (i = 0; acpu_freq_tbl[i].acpu_clk_khz; i++)
+		{
+			if(acpu_freq_tbl[i].use_for_scaling==1)
+			{
+				len += sprintf(buf + len, "%8u: %4d\n", acpu_freq_tbl[i].acpu_clk_khz, acpu_freq_tbl[i].vdd_mv);
+			}
+		}
+		mutex_unlock(&drv_state.lock);
+	}
+	return len;
+}
+
+void acpuclk_set_vdd(unsigned int khz, int vdd)
+{
+	int i;
+	unsigned int new_vdd;
+	vdd = vdd / V_STEP * V_STEP;
+	mutex_lock(&drv_state.lock);
+	for (i = 0; acpu_freq_tbl[i].acpu_clk_khz; i++)
+	{
+		if(acpu_freq_tbl[i].use_for_scaling==1)
+		{
+			if (khz == 0)
+				new_vdd = min(max((acpu_freq_tbl[i].vdd_mv + vdd), SEMC_ACPU_MIN_UV_MV), SEMC_ACPU_MAX_UV_MV);
+			else if (acpu_freq_tbl[i].acpu_clk_khz == khz)
+				new_vdd = min(max((unsigned int)vdd, SEMC_ACPU_MIN_UV_MV), SEMC_ACPU_MAX_UV_MV);
+			else continue;
+
+			acpu_freq_tbl[i].vdd_mv = new_vdd;
+			acpu_freq_tbl[i].vdd_raw = VDD_RAW(new_vdd);
+		}
+	}
+	mutex_unlock(&drv_state.lock);
+}
+
+#endif
